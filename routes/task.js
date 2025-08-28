@@ -1,17 +1,25 @@
 const express = require('express');
-const { getTasks, createTask, updateTask, deleteTask } = require('../controllers/taskController');
+const router = express.Router();
+const { getTasks, getTask, createTask, updateTask, deleteTask } = require('../controllers/taskController');
 const { protect, admin } = require('../middleware/auth');
 
-const router = express.Router();
+const { 
+  validateTaskCreation, 
+  validateTaskUpdate, 
+  validateObjectId, 
+  handleValidationErrors 
+} = require('../middleware/validation');
 
 router.use(protect);
 
 router.route('/')
   .get(getTasks)
-  .post(createTask);
+  .post(validateTaskCreation, handleValidationErrors, createTask);
 
 router.route('/:id')
-  .put(updateTask)
+  .all(validateObjectId, handleValidationErrors)
+  .get(getTask)
+  .put(validateTaskUpdate, handleValidationErrors, updateTask)
   .delete(deleteTask);
 
 module.exports = router;
