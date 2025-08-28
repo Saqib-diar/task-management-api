@@ -5,10 +5,10 @@ const { protect } = require('../middleware/auth')
 const { 
   validateRegistration, 
   validateLogin,  
-  handleValidationErrors // Make sure to import this
+  handleValidationErrors
 } = require('../middleware/validation');
 
-// Add handleValidationErrors after the validation chains
+
 router.post('/register', validateRegistration, handleValidationErrors, register);
 router.post('/login', validateLogin, handleValidationErrors, login);
 router.get('/profile', protect, getProfile);
